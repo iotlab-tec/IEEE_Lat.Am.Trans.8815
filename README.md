@@ -3,26 +3,44 @@ This repository contains the code for the article **_"Implementation of an adapt
 
 The files description is as follows:
 
-+**WebPage.html:** The code provided is dashboard displaying acquired data from the client to the user, automatically refreshing every 30 s. It was created with HTML, CSS, and JavaScript. 
-  Main sections:
-    1. Displays temperature and humidity readings from the DHT sensor, along with latitude and longitude from the GPS.
-    2. Historic plots show the latest values for temperature and humidity, with time on the horizontal axis and data value on the vertical axis. The vertical axis scale adjusts based on the one hundred data points plotted during each refresh.
-    3. Presents the date and time obtained from the GPS.
-    4. Utilizes the Google Maps API to show the location based on latitude and longitude under Geographical Coordinates.
-    5. Includes a menu bar for potential future development, currently serving a decorative purpose.
++ **WebPage.html:** The code provided is a dashboard displaying acquired data from the client to the user, automatically refreshing every 30 s. It was created with HTML, CSS, and JavaScript. 
+    - Main sections:
+      - Displays temperature and humidity readings from the DHT sensor, along with latitude and longitude from the GPS.
+      - Historic plots show the latest values for temperature and humidity, with time on the horizontal axis and data value on the vertical axis. The vertical axis scale adjusts based on the one hundred data points plotted during each refresh.
+      - Presents the date and time obtained from the GPS.
+      - Utilizes the Google Maps API to show the location based on latitude and longitude under Geographical Coordinates.
+      - Includes a menu bar for potential future development, currently serving a decorative purpose.
 
-+**IoT_ESP8266_GPS_TempHumidity_DataLogger.ino:** The code provided is an Arduino sketch that integrates a GPS sensor, a DHT sensor (for temperature and humidity), and an ESP8266 Wi-Fi module to collect and transmit environmental and location data to a server.
-  Libraries Used:
-    ESP8266WiFi.h: Handles the Wi-Fi connection using the ESP8266 module.
-    SoftwareSerial.h: Enables serial communication on digital pins to interact with the GPS module.
-    TinyGPS.h: Handles the parsing and extraction of GPS data (latitude, longitude, time).
-    DHT.h: Handles communication with a DHT11 sensor to measure temperature and humidity.
-  Key Components:
-    1. DHT Sensor Setup: The DHT11 sensor is used for temperature and humidity readings. It is connected to a specified pin (DHTPIN 0) on the microcontroller.
-    2. GPS Setup: The TinyGPS library is used to handle GPS data. A SoftwareSerial instance is created to interface with the GPS module through pins 4 and 5.
-    3. Wi-Fi Setup: The sketch sets the ESP8266 in station mode and connects it to a Wi-Fi network using provided SSID and password.
-    4. Main Functionality: The loop() function collects temperature and humidity data from the DHT sensor. It also gathers latitude, longitude, and date/time data from the GPS module. Once the data is collected, the ESP8266 sends this information to a remote server through an HTTP GET request. The data is passed as URL parameters, such as temperature, humidity, latitude, longitude, date, and time.
-    5. Supporting Functions: 
++ **IoT_ESP8266_GPS_TempHumidity_DataLogger.ino:** The code provided is an Arduino sketch that integrates a GPS sensor, a DHT sensor (for temperature and humidity), and an ESP8266 Wi-Fi module to collect and transmit environmental and location data to a server.
+    - Libraries Used:
+      - ESP8266WiFi.h: Handles the Wi-Fi connection using the ESP8266 module.
+      - SoftwareSerial.h: Enables serial communication on digital pins to interact with the GPS module.
+      - TinyGPS.h: Handles the parsing and extraction of GPS data (latitude, longitude, time).
+      - DHT.h: Handles communication with a DHT11 sensor to measure temperature and humidity.
+    - Key Components:
+      - DHT Sensor Setup: The DHT11 sensor is used for temperature and humidity readings. It is connected to a specified pin (DHTPIN 0) on the microcontroller.
+      - GPS Setup: The TinyGPS library is used to handle GPS data. A SoftwareSerial instance is created to interface with the GPS module through pins 4 and 5.
+      - Wi-Fi Setup: The sketch sets the ESP8266 in station mode and connects it to a Wi-Fi network using provided SSID and password.
+      - Main Functionality: The loop() function collects temperature and humidity data from the DHT sensor. It also gathers latitude, longitude, and date/time data from the GPS module. Once the data is collected, the ESP8266 sends this information to a remote server through an HTTP GET request. The data is passed as URL parameters, such as temperature, humidity, latitude, longitude, date, and time.
+      - Supporting Functions: 
       smartdelay(): This function ensures the GPS module continues to receive and process data during the delay periods.
       print_date(): This function extracts and formats the date and time information from the GPS module.
 
++ **IoT_Adaptive_DataLogger.ino:** The code provided is designed for an ESP8266 microcontroller to collect and display environmental data, specifically temperature and humidity, over a WiFi network.
+    - Libraries Used:
+      - ESP8266WiFi.h: Handles WiFi connectivity.
+      - WiFiClient.h: Provides client functionality for WiFi connections.
+      - ESP8266WebServer.h: Sets up a web server on the ESP8266 to handle HTTP requests.
+      - SD.h: Allows the microcontroller to interact with an SD card for file storage.
+    - Key Components:
+      - WiFi Setup: The microcontroller connects to a WiFi network using credentials (ssid and password). It configures the device with a static IP address (192.168.0.94), subnet mask, gateway, and DNS.
+      - Data Collection and Handling: The microcontroller reads temperature and humidity data sent through HTTP GET requests to a URL /DATA/. The data is collected from parameters such as ID, temperature, humidity, latitude, longitude, date, and time. The temperature and humidity readings are stored in arrays to track historical data, and are also written to an SD card in a CSV file format (Data.csv).
+      - Adaptive Data Logging: The code includes a mechanism to adjust the data logging interval (TimeWait) based on the difference between consecutive temperature readings. If the temperature difference (e) is small, the interval increases, and if the difference is large, the interval decreases. This is an adaptive algorithm to avoid logging redundant data while capturing significant changes.
+      - Web Interface:  A HTML page is dynamically generated by the ESP8266. This page displays:
+        - Current temperature and humidity values.
+        - Geographical coordinates (latitude and longitude).
+        - A Google Maps section showing the location where the measurements are taken.
+        - Charts (using Chart.js) showing the historical trend of temperature and humidity.
+        - The page automatically refreshes every 30 seconds to display the latest data.
+      - Web Server: The web server listens for requests to the /DATA/ URL, which triggers the handleURL function. This function processes the incoming data and stores it. Another endpoint (/) serves the dynamically created HTML page with real-time and historical data.
+      - Other Features: The maximum and minimum recorded values for both temperature and humidity are updated with each new reading. The collected data is visualized on the page using graphs for the environmental variables, and the Google Maps API is used to display the position of data collection.
