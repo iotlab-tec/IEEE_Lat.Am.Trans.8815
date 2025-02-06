@@ -1,5 +1,5 @@
 # IEEE_Lat.Am.Trans.8815
-This repository contains the code for the article **_"Implementation of an adaptive data logging algorithm in low-cost IoT nodes for supply chain transport monitoring"_** published in **IEEE Latin America Transactions (ISSN: 1548-0992)**.
+This repository contains the code for the article **_"Implementation of an adaptive data logging algorithm in low-cost IoT nodes for supply chain transport monitoring"_** published in **IEEE Latin America Transactions (ISSN: 1548-0992, DOI: [10.1109/TLA.2024.10705972](https://doi.org/10.1109/TLA.2024.10705972))**.
 
 The files description is as follows:
 
